@@ -22,7 +22,7 @@ unit Second "s" = <Time>;
 unit Kilogram "kg" = <Mass>;
 unit DegKelvin "K" "deg.K" = <Temperature>;
 //unit Ampere "A" = <ElectricCurrent>;
-//unit Mole "mol" = <AmountOfSubstance>;
+unit Mole "mol" = <AmountOfSubstance>;
 //unit Candela "cd" = <LuminousIntensity>;
 
 unit<double> EUR "EUR" = <Money>;  // Euro
@@ -36,7 +36,7 @@ unit Millimeter "mm" = 1000 * Meter;
 //unit Micron "um" "micrometer" = 1.0e6 * Meter;
 //unit Nanometer "nm" "nanometer" = 1.0e9 * Meter;
 //unit Angstrom "angstrom" = 1.0e10 * Meter;
-//unit Kilometer "km" = Meter / 1000;
+unit Kilometer "km" = Meter / 1000;
 
 unit Inch "in" = Millimeter / 25.4;
 unit /* international */ Foot "ft" = Inch / 12;
@@ -62,23 +62,23 @@ unit Hour "h" = Minute / 60;
 //      Mass
 //
 unit Gram "g" = 1000 * Kilogram;
-//unit Microgram "ug" = 1.0e6 * Gram;
-//unit Tonne "t" = Kilogram / 1000;
+unit Microgram "ug" = 1.0e6 * Gram;
+unit Tonne "t" = Kilogram / 1000;
 
-//unit /* avoirdupois */ Pound "lb" = Kilogram / 0.45359237;
-//unit /* avoirdupois */ Ounce "ou" = Pound * 16;
+unit /* avoirdupois */ Pound "lb" = Kilogram / 0.45359237;
+unit /* avoirdupois */ Ounce "ou" = Pound * 16;
 
 ////////////////////////////////////////////////////////////////////////////////
 //
 //      Temperature
 //
 unit DegCelsius "deg.C" = DegKelvin;
-//unit DegRankine "deg.R" = (9 / 5) * DegKelvin;
+unit DegRankine "deg.R" = (9 / 5) * DegKelvin;
 unit DegFahrenheit "deg.F" = (9 / 5) * DegKelvin;
 
 scale Kelvin AbsoluteZero = DegKelvin 0.0;
 scale Celsius AbsoluteZero = DegCelsius -273.15;
-//scale Rankine AbsoluteZero = DegRankine 0.0;
+scale Rankine AbsoluteZero = DegRankine 0.0;
 scale Fahrenheit AbsoluteZero = DegFahrenheit -273.15 * (9 / 5) + 32;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -155,9 +155,9 @@ unit Radian "rad" = <>;
 unit Degree "deg" : "%f%s" = (180 / "Math.PI") * Radian;
 //unit ArcMinute "'" : "%f%s" = 60 * Degree;
 //unit ArcSecond "\"" : "%f%s" = 60 * ArcMinute;
-//unit Grad "grad" = (200 / "Math.PI") * Radian;
+unit Grad "grad" = (200 / "Math.PI") * Radian;
 
-//unit Turn /* aka. cycle, revolution, rotation */ "tr" = Radian / (2 * "Math.PI");
+unit Turn /* aka. cycle, revolution, rotation */ "tr" = Radian / (2 * "Math.PI");
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -170,10 +170,12 @@ unit Degree "deg" : "%f%s" = (180 / "Math.PI") * Radian;
 //
 //      Frequency
 //
-//unit Hertz "Hz" = 1 / Second;
+unit Hertz "Hz" = 1 / Second;
 //unit KiloHertz "kHz" = Hertz / 1000;
 //unit MegaHertz "MHz" = KiloHertz / 1000;
 //unit GigaHertz "GHz" = MegaHertz / 1000;
+
+unit Vehicles_Hour "veh/h" = 1 / Hour | 3600 * Hertz;
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -199,9 +201,9 @@ unit Degree "deg" : "%f%s" = (180 / "Math.PI") * Radian;
 //      NOTE: other literals prevents the factor check: you have to
 //      take care of the consistency by other means (e.g. unit tests).
 //
-//unit Radian_Sec "rad/s" = Radian / Second | Radian * Hertz;
-//unit Degree_Sec "degree/s" = Degree / Second | (180 / "Math.PI") * Radian_Sec;
-//unit RPM "rpm" = Turn / Minute | (30 / "Math.PI") * Radian_Sec;
+unit Radian_Sec "rad/s" = Radian / Second | Radian * Hertz;
+unit Degree_Sec "degree/s" = Degree / Second | (180 / "Math.PI") * Radian_Sec;
+unit RPM "rpm" = Turn / Minute | (30 / "Math.PI") * Radian_Sec;
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -258,9 +260,9 @@ unit Meter3 "m3" = Meter2 * Meter;
 //      Velocity
 //
 unit Meter_Sec "m/s" = Meter / Second;
-//unit Centimeter_Sec "cm/s" = Centimeter / Second | 100 * Meter_Sec;
+unit Centimeter_Sec "cm/s" = Centimeter / Second | 100 * Meter_Sec;
 //unit Kilometer_Hour "km/h" = Kilometer / Hour | Meter_Sec * (1/1000) / ((1/60)/60);
-//unit MPH "mph" "mi/h" = Mile / Hour | Meter_Sec * ((((100/2.54)/12)/3)/1760) / ((1/60)/60);
+unit MPH "mph" "mi/h" = Mile / Hour | Meter_Sec * ((((100/2.54)/12)/3)/1760) / ((1/60)/60);
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -272,7 +274,7 @@ unit Meter_Sec2 "m/s2" = Meter_Sec / Second;
 //
 //      Velocity squared (kinetic and potential energy subexpressions)
 //
-//unit Meter2_Sec2 "m2/s2" = Meter_Sec * Meter_Sec | Meter_Sec2 * Meter;
+unit Meter2_Sec2 "m2/s2" = Meter_Sec * Meter_Sec | Meter_Sec2 * Meter;
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -281,36 +283,36 @@ unit Meter_Sec2 "m/s2" = Meter_Sec / Second;
 //          momentum diffusivity,
 //          specific angular momentum)
 //
-//unit Meter2_Sec "m2/s" = Meter2 / Second | Meter_Sec * Meter | Meter2_Sec2 * Second;
+unit Meter2_Sec "m2/s" = Meter2 / Second | Meter_Sec * Meter | Meter2_Sec2 * Second;
 
 ////////////////////////////////////////////////////////////////////////////////
 //
 //      Linear mass density
 //
-//unit Gram_Meter "g/m" = Gram / Meter;
+unit Gram_Meter "g/m" = Gram / Meter;
 //unit Gram_Kilometer "g/km" = Gram / Kilometer | Gram_Meter * 1000;
-//unit Gram_Mile "g/mi" = Gram / Mile | Gram_Meter / (1000/(25.4*12*3*1760));
-//unit Microgram_Meter "ug/m" = Microgram / Meter | 1000000 * Gram_Meter;
+unit Gram_Mile "g/mi" = Gram / Mile | Gram_Meter / (1000/(25.4*12*3*1760));
+unit Microgram_Meter "ug/m" = Microgram / Meter | 1000000 * Gram_Meter;
 
 ////////////////////////////////////////////////////////////////////////////////
 //
 //      Volumetric mass density (aka. specific mass, mass concentration)
 //
-//unit Gram_Meter3 "g/m3" = Gram / Meter3;
-//unit Microgram_Meter3 "ug/m3" = Microgram / Meter3 | 1.0e6 * Gram_Meter3;
+unit Gram_Meter3 "g/m3" = Gram / Meter3;
+unit Microgram_Meter3 "ug/m3" = Microgram / Meter3 | 1.0e6 * Gram_Meter3;
 
 ////////////////////////////////////////////////////////////////////////////////
 //
 //      Molar Volume
 //
-//unit Meter3_Mole "m3/mol" = Meter3 / Mole;
+unit Meter3_Mole "m3/mol" = Meter3 / Mole;
 
 ////////////////////////////////////////////////////////////////////////////////
 //
 //      Molar mass
 //
-//unit Gram_Mole "g/mol" = Gram / Mole | Gram_Meter3 * Meter3_Mole;
-//unit Microgram_Mole "ug/mol" = Microgram / Mole | Microgram_Meter3 * Meter3_Mole | 1.0e6 * Gram_Mole;
+unit Gram_Mole "g/mol" = Gram / Mole | Gram_Meter3 * Meter3_Mole;
+unit Microgram_Mole "ug/mol" = Microgram / Mole | Microgram_Meter3 * Meter3_Mole | 1.0e6 * Gram_Mole;
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -491,3 +493,19 @@ unit NewtonMeter "N*m" = Newton ^ Meter;
 //
 //unit Weber "Wb" = Joule / Ampere | Volt * Second;
 //unit Maxwell "Mx" = 1.0e8 * Weber;
+
+////////////////////////////////////////////////////////////////////////////////
+//
+//      Vehicle Emission Strength (CALINE3)
+//
+unit Microgram_Meter_Sec "ug/m/s" = Microgram_Meter / Second | Microgram_Meter * Hertz | Microgram_Meter3 * Meter2_Sec;
+unit Gram_Mile_Hour "g/mi/h" = Gram_Mile * Vehicles_Hour;
+
+////////////////////////////////////////////////////////////////////////////////
+//
+//      Parts-per notation (CALINE3)
+//
+unit Ratio "ratio" = <>;
+unit Ppm "ppm" = 1.0e6 * Ratio;
+unit Ppb "ppb" = 1.0e9 * Ratio;
+
