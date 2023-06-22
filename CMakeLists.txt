@@ -107,3 +107,6 @@ add_subdirectory ("Metrology")
 
 # CALINE3 app:
 add_subdirectory ("CALINE3")
+
+# Boost Test app:
+add_subdirectory ("TestBoost")
