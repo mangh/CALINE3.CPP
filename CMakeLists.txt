@@ -113,3 +113,6 @@ add_subdirectory ("TestBoost")
 
 # Google Test app:
 add_subdirectory ("TestGoogle")
+
+# Bullet benchmark:
+add_subdirectory ("TestBullet")
