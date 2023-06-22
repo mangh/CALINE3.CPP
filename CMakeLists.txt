@@ -110,3 +110,6 @@ add_subdirectory ("CALINE3")
 
 # Boost Test app:
 add_subdirectory ("TestBoost")
+
+# Google Test app:
+add_subdirectory ("TestGoogle")
