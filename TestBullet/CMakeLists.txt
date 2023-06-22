@@ -23,9 +23,6 @@ add_executable(
 #   COMPILE DEFINITIONS & OPTIONS
 #
 
-# if(DIMENSIONAL_MODE)
-#   target_compile_definitions(${target} PRIVATE DIMENSIONAL_ANALYSIS)
-# endif()
 target_compile_features(${target} PRIVATE cxx_std_17)
 target_compile_options(${target} PRIVATE $<IF:$<C_COMPILER_ID:MSVC>,/W3,-Wall -Wextra>)
 target_include_directories(${target}

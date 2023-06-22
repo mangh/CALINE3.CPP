@@ -41,14 +41,8 @@ set(APP_VER_CFG "${APP_VER}$<$<CONFIG:Debug>:d>")
 #   OPTIONS
 #
 
-# # Dimensional mode option:
-# set(DIMENSIONAL_MODE ON CACHE BOOL "Dimensional mode: On/Off")
-
 # GNU standard directories for installation
 include(GNUInstallDirs)
-
-# # helper modules:
-# list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
 # Check whether the compiler supports an interprocedural optimization (IPO/LTO):
 include(CheckIPOSupported OPTIONAL RESULT_VARIABLE check_ipo_module_found)
@@ -108,11 +102,11 @@ add_subdirectory ("Metrology")
 # CALINE3 app:
 add_subdirectory ("CALINE3")
 
-# Boost Test app:
+# Boost Test app (comment out the following command to skip the test):
 add_subdirectory ("TestBoost")
 
-# Google Test app:
+# Google Test app (comment out the following command to skip the test):
 add_subdirectory ("TestGoogle")
 
-# Bullet benchmark:
+# Bullet benchmark (comment out the following command to skip the benchmark):
 add_subdirectory ("TestBullet")
