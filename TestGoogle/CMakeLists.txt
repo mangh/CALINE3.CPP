@@ -64,15 +64,12 @@ add_executable(
 #   COMPILE DEFINITIONS & OPTIONS
 #
 
-# if(DIMENSIONAL_MODE)
-#   target_compile_definitions(${target} PRIVATE DIMENSIONAL_ANALYSIS)
-# endif()
 target_compile_features(${target} PUBLIC cxx_std_17)
 target_compile_options(${target} PRIVATE $<IF:$<C_COMPILER_ID:MSVC>,/W3,-Wall -Wextra>)
 target_include_directories(${target}
     PRIVATE
   # GoogleTest and METROLOGY_LIBRARY include-directories will get in here via
-  # target_link_libraries linked in below (as their Usage Requirements).
+  # target_link_libraries() used below (as the so called Usage Requirements of those libraries).
   "${CALINE3_DIR}"
 )
 
@@ -81,8 +78,6 @@ target_include_directories(${target}
 #   LINK OPTIONS & LIBRARIES
 #
 
-# NOTE: GTest and METROLOGY_LIBRARY libraries linked below propagate their
-# usage requirement (e.g. include directories) to the target app!
 target_link_libraries(${target}
     PRIVATE
   GTest::gtest

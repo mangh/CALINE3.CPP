@@ -16,8 +16,8 @@ set(_source_files
   WindFlow.cpp
 )
 
-# Set explicit dependency of source files on unit headers (for simplicity,
-# it is assumed here that all source files depend on those headers):
+# Set explicit dependency of source files on METROLOGY headers
+# (for simplicity, it is assumed here that all source files depend on those headers):
 set_property(
   SOURCE ${_source_files}
   PROPERTY OBJECT_DEPENDS "${METROLOGY_CHANGE_TIP}"
@@ -37,8 +37,8 @@ add_executable(
 target_compile_features(${target} PRIVATE cxx_std_17)
 target_compile_options(${target} PRIVATE $<IF:$<C_COMPILER_ID:MSVC>,/W3,-Wall -Wextra>)
 
-# METROLOGY_LIBRARY include-directories will get in here via target_link_libraries command
-# below (as the Usage Requirements of the METROLOGY_LIBRARY).
+# METROLOGY_LIBRARY include-directories will get imported here via
+# target_link_libraries() command below (as the Usage Requirements of the METROLOGY_LIBRARY).
 
 ##########################################################################
 #
@@ -57,17 +57,17 @@ endif()
 #   LINK OPTIONS & LIBRARIES
 #
 
-# IPO/LTO optimization makes the app the same performant regardless
-# of DIMENSIONAL_ANALYSIS setting (whether it is ON or OFF):
+# IPO/LTO optimization makes the application just as efficient
+# whether it uses units of measure or simple numbers.
 if(LTO_OPTIMIZATION_SUPPORTED)
   set_property(TARGET ${target} PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
 else()
   message(WARNING "IPO/LTO is not supported: ${LTO_OPTIMIZATION_ERROR}")
 endif()
 
-# target_link_libraries command imports the so called Usage Requirements of
-# the METROLOGY_LIBRARY. This means, among other things, import of the library
-# include-directories (without using the target_include_directories command):
+# target_link_libraries() command below imports the so called Usage Requirements of
+# the METROLOGY_LIBRARY, which include (among other things) its include directories
+# (so there is no need to use the target_include_directories() command):
 target_link_libraries(${target}
     PRIVATE
   METROLOGY_LIBRARY

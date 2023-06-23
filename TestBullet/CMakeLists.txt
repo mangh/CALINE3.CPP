@@ -47,8 +47,8 @@ endif()
 #   LINK OPTIONS & LIBRARIES
 #
 
-# IPO/LTO optimization makes the app the same performant regardless
-# of DIMENSIONAL_ANALYSIS setting (whether it is ON or OFF):
+# IPO/LTO optimization makes the application just as efficient
+# whether it uses units of measure or simple numbers.
 if(LTO_OPTIMIZATION_SUPPORTED)
   set_property(TARGET ${target} PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
 else()
