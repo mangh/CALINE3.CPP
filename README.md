@@ -1,6 +1,6 @@
 # CALINE3.CPP
 
-[Units of Measurement](https://github.com/mangh/metrology) applied to the
+[Metrology (Units of Measurement)](https://github.com/mangh/metrology) applied to the
 [CALINE3 Model Algorithm](https://www.epa.gov/scram/air-quality-dispersion-modeling-alternative-models#caline3)
 (rewritten in C++).
 
