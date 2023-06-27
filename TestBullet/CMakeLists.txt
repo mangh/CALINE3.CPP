@@ -24,7 +24,8 @@ add_executable(
 #
 
 target_compile_features(${target} PRIVATE cxx_std_17)
-target_compile_options(${target} PRIVATE $<IF:$<C_COMPILER_ID:MSVC>,/W3,-Wall -Wextra>)
+# Warning options set differently for MSVC-like compiler (/W3) and all others (-Wall -Wextra):
+target_compile_options(${target} PRIVATE $<IF:$<OR:$<CXX_COMPILER_ID:MSVC>,$<STREQUAL:${CMAKE_CXX_COMPILER_FRONTEND_VARIANT},MSVC>>,/W3,-Wall -Wextra>)
 target_include_directories(${target}
   PRIVATE 
   "${CALINE3_DIR}"
