@@ -65,27 +65,29 @@ option(USE_ASAN "Use Address Sanitizer: OFF/ON" OFF)
 message(DEBUG "Use Address Sanitizer: ${USE_ASAN}")
 
 #########
-# MSVC_RUNTIME option (for compilers targeting the MSVC ABI - other compilers ignore it).
-# Dynamic RT is the default but Address Sanitizer requires the Static one:
-set(_msvc_runtime_doc "MSVC Runtime Library: Dynamic/Static (for compilers targeting the MSVC ABI)")
+# MSVC_RUNTIME option (for compilers targeting the MSVC ABI - other compilers ignore it):
+set(_msvc_runtime_doc "MSVC Runtime Library option for compilers targeting the MSVC ABI")
+
+# "Dynamic" is the default setting, but Address Sanitizer requires "Static":
 if(USE_ASAN)
   set(MSVC_RUNTIME "Static" CACHE STRING "${_msvc_runtime_doc}" FORCE)
 else()
   set(MSVC_RUNTIME "Dynamic" CACHE STRING "${_msvc_runtime_doc}")
 endif()
 
+# MSVC_RUNTIME allowed values (to be displayed in combobox in CMake GUI):
 set_property(CACHE MSVC_RUNTIME PROPERTY STRINGS Dynamic Static)
 
-set(_msvc_runtime_string "MSVC runtime library for use by compilers targeting the MSVC ABI")
 if(MSVC_RUNTIME MATCHES "^Dynamic$")
-  set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL" CACHE STRING "${_msvc_runtime_string}" FORCE)
+  set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL" CACHE STRING "${_msvc_runtime_doc}" FORCE)
 elseif(MSVC_RUNTIME MATCHES "^Static$")
-  set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>" CACHE STRING "${_msvc_runtime_string}" FORCE)
+  set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>" CACHE STRING "${_msvc_runtime_doc}" FORCE)
 else()
   get_property(_msvc_rt_options CACHE MSVC_RUNTIME PROPERTY STRINGS)
-  message(FATAL_ERROR "Invalid option MSVC Runtime Library: ${MSVC_RUNTIME} (allowed options: ${_msvc_rt_options}).")
+  message(FATAL_ERROR "Invalid MSVC Runtime Library option: ${MSVC_RUNTIME} (allowed options: ${_msvc_rt_options}).")
 endif()
-message(DEBUG "MSVC Runtime Library: ${MSVC_RUNTIME}")
+
+message(DEBUG "MSVC Runtime Library: ${CMAKE_MSVC_RUNTIME_LIBRARY} (${MSVC_RUNTIME})")
 
 ##########################################################################
 #
