@@ -363,5 +363,6 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # CALINE3.CPP temporary files
+.ccls-cache/
 build/
 Metrology/Units/
