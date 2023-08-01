@@ -37,9 +37,9 @@ namespace Bullet::Measured
         results.clear();
         //benchmark.Reset();
 
-        const auto t1 = std::chrono::high_resolution_clock::now();
+        const auto t1 = std::chrono::steady_clock::now();
         for (Degree slope = min; slope < max; slope += step) results.push_back(CalculateRange(slope));
-        const auto t2 = std::chrono::high_resolution_clock::now();
+        const auto t2 = std::chrono::steady_clock::now();
         std::chrono::duration<double, std::micro> duration = t2 - t1;
 
         benchmark.Add(elapsed = duration.count());

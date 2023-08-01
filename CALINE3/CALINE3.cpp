@@ -23,12 +23,18 @@
 
 using namespace CALINE3;
 
+// Elapsed time (in microseconds)
+using elapsed_t = std::chrono::duration<double, std::micro>;
+
 int main(int argc, char* argv[])
 {
     if (argc < 2)
     {
-        std::cerr << "Missing or invalid command line arguments" << std::endl
-                  << "Usage: " << (argv[0] ? argv[0] : "CALINE3") << " /path/to/input.data" << std::endl;
+        std::cerr
+            << "Missing or invalid command line arguments"
+            << std::endl
+            << "Usage: " << (argv[0] ? argv[0] : "CALINE3") << " /path/to/input.data"
+            << std::endl;
         return 1;
     }
 
@@ -46,14 +52,19 @@ int main(int argc, char* argv[])
     JobReader rdr{ argv[1], input };
     Report report{std::cout};
 
-    std::chrono::duration<double, std::micro> elapsed{ 0.0 };
+    // Total calculation time:
+    elapsed_t total_elapsed{ 0.0 };
+
     while (rdr.Read())
     {
         auto& site = rdr.LastJob();
 
+        // Job calculation time:
+        elapsed_t job_elapsed{ 0.0 };
+
         for(auto const &meteo : site.Meteos)
         {
-            const auto t1 = std::chrono::high_resolution_clock::now();
+            const auto start_time = std::chrono::steady_clock::now();
 
             /// Mass concentration matrix
             std::vector<std::vector<Microgram_Meter3>> MC{ site.Links.size() };
@@ -69,14 +80,23 @@ int main(int argc, char* argv[])
                 }
             }
 
-            const auto t2 = std::chrono::high_resolution_clock::now();
-            elapsed += t2 - t1;
+            job_elapsed += std::chrono::steady_clock::now() - start_time;
 
             report.Print(site, meteo, MC);
         }
+
+        total_elapsed += job_elapsed;
+
+        std::cout
+            << std::endl
+            << "Job computation time (excl. I/O): " << job_elapsed.count() << " us"
+            << " :: " << site.JOB << " :: " << site.RUN
+            << std::endl
+            << std::endl
+        ;
     }
 
-    std::cout << std::endl << "Computation time duration (excluding I/O): " << elapsed.count() << " microseconds." << std::endl;
+    std::cout << "Total computation time (excl. I/O): " << total_elapsed.count() << " us." << std::endl;
 
     return rdr.ErrorFound() ? 3 : 0;
 }
