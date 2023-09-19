@@ -1,26 +1,22 @@
-# Metrology Boost Tests
+# CALINE3 and Metrology (Boost) Tests
 #
 set(target "TestBoost")
 
-# Find libboost_unit_test_framework-*:
+# Find libboost_unit_test_framework-* libraries:
 set(component "unit_test_framework")
 string(TOUPPER ${component} _COMPONENT)
 
-set(Boost_USE_STATIC_LIBS        ON)  # only find static libs
-set(Boost_USE_DEBUG_LIBS        OFF)  # ignore debug libs and
-set(Boost_USE_RELEASE_LIBS       ON)  # only find release libs
-set(Boost_USE_MULTITHREADED      ON)
-if(MSVC_RUNTIME MATCHES "Static")
-  set(Boost_USE_STATIC_RUNTIME   ON)
-else()
-  set(Boost_USE_STATIC_RUNTIME  OFF)
-endif()
+# set(Boost_USE_STATIC_LIBS    ON)  # only find static libs
+# set(Boost_USE_DEBUG_LIBS     OFF) # ignore debug libs and
+# set(Boost_USE_RELEASE_LIBS   ON)  # only find release libs
+# set(Boost_USE_MULTITHREADED  ON)
+# set(Boost_USE_STATIC_RUNTIME OFF)
 
 # FindBoost module (used below) may need Hints (e.g. BOOST_ROOT)
 # to find Boost repository (include-directories and/or libraries):
 find_package(Boost #[[REQUIRED]] COMPONENTS "${component}")
 if(NOT Boost_${_COMPONENT}_FOUND)
-  message(WARNING "Could not find Boost ${_COMPONENT} component: cannot build Boost Tests.")
+  message(WARNING "Boost Tests unavailable: ${_COMPONENT} component cannot be found.")
   return()
 endif()
 
@@ -64,13 +60,13 @@ add_executable(
 #
 
 target_compile_features(${target} PUBLIC cxx_std_17)
-# Warning options set differently for MSVC-like compiler (/W3) and all others (-Wall -Wextra):
 target_compile_options(${target} PRIVATE $<IF:$<STREQUAL:${CMAKE_CXX_COMPILER_FRONTEND_VARIANT},MSVC>,/W3,-Wall -Wextra>)
 target_include_directories(${target}
     PRIVATE
-  # BoostTest and METROLOGY_LIBRARY include-directories will get in here via
-  # target_link_libraries() used below (as the so called Usage Requirements of those libraries).
   "${CALINE3_DIR}"
+  # The include directories required for BoostTest and METROLOGY libraries
+  # will be provided via the target_link_libraries() command used below
+  # (as the so-called Usage Requirements of these libraries)
 )
 
 ##########################################################################
@@ -93,19 +89,17 @@ set_target_properties(${target} PROPERTIES
 #   INSTALL
 #
 
-set_target_properties(${target} PROPERTIES OUTPUT_NAME "${target}${APP_VER_CFG}")
-
-install(TARGETS ${target}
-  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-  # PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${LUA_APP_VER_CFG}
-  # FILE_SET public_headers DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${LUA_APP_VER_CFG}
-)
+set(testApp "${target}-v${APP_VER_CFG}")
+set_target_properties(${target} PROPERTIES OUTPUT_NAME "${testApp}")
 
 ##########################################################################
 #
 #   TEST
 #
+#   Use the following command (in the project's root directory) to
+#   run this test:
+#
+#       ./build/${testApp} --log_level=test_suite
+#
 
-enable_testing()
-add_test(NAME "MetBoostTesting" COMMAND ${target} "--log_level=test_suite")
+add_test(NAME "CALINE3 and Metrology (Boost) Tests" COMMAND ${target} "--log_level=test_suite")

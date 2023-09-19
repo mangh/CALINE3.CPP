@@ -1,4 +1,4 @@
-# Metrology Google Tests
+# CALINE3 and Metrology (Google) Tests
 #
 
 ##########################################################################
@@ -7,25 +7,38 @@
 #
 
 set(CMAKE_CXX_STANDARD 14)
-
-# For Windows: Prevent overriding the parent project's compiler/linker settings
-if(MSVC_RUNTIME MATCHES "Static")
-  set(gtest_force_shared_crt OFF CACHE BOOL "" FORCE)
-else()
-  set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-endif()
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include(FetchContent)
 
-# GoogleTest standard release
+# GoogleTest main (master) release branch
 FetchContent_Declare(
   googletest
   GIT_REPOSITORY https://github.com/google/googletest.git
-  GIT_TAG release-1.12.1  # 58d77fa8070e8cec2dc1ed015d66b454c8d78850
-  # GIT_TAG v1.13.0
+  # GIT_TAG release-1.12.1  # the latest version that compiles without errors or warnings
+  GIT_TAG main
 )
 
 FetchContent_MakeAvailable(googletest)
+
+# Clang compiler issues the following warnings for "GIT_TAG main" (v1.14.0 as of September 15, 2023) on Windows:
+#
+# googletest-src/googletest/include\gtest/internal/gtest-port.h:832:5: warning: 'GTEST_LINKED_AS_SHARED_LIBRARY' is not defined, evaluates to 0 [-Wundef]
+# googletest-src/googletest/include\gtest/internal/gtest-port.h:834:7: warning: 'GTEST_CREATE_SHARED_LIBRARY' is not defined, evaluates to 0 [-Wundef]
+#
+# These warnings are harmless (Clang guesses the correct values and CMake builds the correct executable),
+# but you can suppress them with the following definitions:
+# 
+# if (NOT BUILD_SHARED_LIBS)
+#   target_compile_definitions(gtest
+#     PUBLIC GTEST_LINKED_AS_SHARED_LIBRARY=1
+#     PUBLIC GTEST_CREATE_SHARED_LIBRARY=1
+#   )
+# endif()
+#
+# NOTE: All of the above refers to the CMake setting BUILD_SHARED_LIBS=OFF.
+#       BUILD_SHARED_LIBS=ON is even more troublesome: better stay away from it.
+#
 
 ##########################################################################
 #
@@ -69,9 +82,10 @@ target_compile_features(${target} PUBLIC cxx_std_17)
 target_compile_options(${target} PRIVATE $<IF:$<STREQUAL:${CMAKE_CXX_COMPILER_FRONTEND_VARIANT},MSVC>,/W3,-Wall -Wextra>)
 target_include_directories(${target}
     PRIVATE
-  # GoogleTest and METROLOGY_LIBRARY include-directories will get in here via
-  # target_link_libraries() used below (as the so called Usage Requirements of those libraries).
   "${CALINE3_DIR}"
+  # The include directories required for GoogleTest and METROLOGY libraries
+  # will be provided via the target_link_libraries() command used below
+  # (as the so-called Usage Requirements of these libraries)
 )
 
 ##########################################################################
@@ -96,20 +110,18 @@ set_target_properties(${target}
 #   INSTALL
 #
 
-set_target_properties(${target} PROPERTIES OUTPUT_NAME "${target}${APP_VER_CFG}")
-
-install(TARGETS ${target}
-  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-  # PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${LUA_APP_VER_CFG}
-  # FILE_SET public_headers DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${LUA_APP_VER_CFG}
-)
+set(testApp "${target}-v${APP_VER_CFG}")
+set_target_properties(${target} PROPERTIES OUTPUT_NAME "${testApp}")
 
 ##########################################################################
 #
-#   Test
+#   TEST
+#
+#   Use the following command (in the project's root directory) to
+#   run this test:
+#
+#       ./build/${testApp}
 #
 
-enable_testing()
-include(GoogleTest)
-gtest_discover_tests(${target})
+add_test(NAME "# CALINE3 and Metrology (Google) Tests" COMMAND ${target})
+

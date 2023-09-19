@@ -1,4 +1,4 @@
-# Metrology Bullet benchmark
+# Metrology Bullet Benchmark
 #
 set(target "TestBullet")
 
@@ -24,7 +24,6 @@ add_executable(
 #
 
 target_compile_features(${target} PRIVATE cxx_std_17)
-# Warning options set differently for MSVC-like compiler (/W3) and all others (-Wall -Wextra):
 target_compile_options(${target} PRIVATE $<IF:$<STREQUAL:${CMAKE_CXX_COMPILER_FRONTEND_VARIANT},MSVC>,/W3,-Wall -Wextra>)
 target_include_directories(${target}
   PRIVATE 
@@ -56,6 +55,9 @@ else()
   message(WARNING "IPO/LTO is not supported: ${LTO_OPTIMIZATION_ERROR}")
 endif()
 
+# target_link_libraries() command below imports the so called Usage Requirements of
+# the METROLOGY_LIBRARY, which include (among other things) its include directories
+# (so there is no need to use the target_include_directories() command):
 target_link_libraries(${target}
     PRIVATE
   METROLOGY_LIBRARY
@@ -70,12 +72,17 @@ set_target_properties(${target}
 #
 #   INSTALL
 #
+#   Use the following command (in the project's root directory) to
+#   run the application:
+#
+#       ./build/${testApp}
+#
 
-set_target_properties(${target} PROPERTIES OUTPUT_NAME "${target}${APP_VER_CFG}")
+set(testApp "${target}-v${APP_VER_CFG}")
+set_target_properties(${target} PROPERTIES OUTPUT_NAME "${testApp}")
 
 install(TARGETS ${target}
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-  # PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${LUA_APP_VER_CFG}
-  # FILE_SET public_headers DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${LUA_APP_VER_CFG}
 )
+

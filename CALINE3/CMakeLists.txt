@@ -35,11 +35,7 @@ add_executable(
 #
 
 target_compile_features(${target} PRIVATE cxx_std_17)
-# Warning options set differently for MSVC-like compiler (/W3) and all others (-Wall -Wextra):
 target_compile_options(${target} PRIVATE $<IF:$<STREQUAL:${CMAKE_CXX_COMPILER_FRONTEND_VARIANT},MSVC>,/W3,-Wall -Wextra>)
-
-# METROLOGY_LIBRARY include-directories will get imported here via
-# target_link_libraries() command below (as the Usage Requirements of the METROLOGY_LIBRARY).
 
 ##########################################################################
 #
@@ -83,12 +79,21 @@ set_target_properties(${target}
 #
 #   INSTALL
 #
+#   Use the following command (in the project's root directory) to
+#   run the application:
+#
+#       ./build/${testApp} /path/to/input_data.txt
+#
+#   For example:
+#
+#       ./build/${testApp} ./CALINE3.EXP
+#
 
-set_target_properties(${target} PROPERTIES OUTPUT_NAME "${target}${APP_VER_CFG}")
+set(testApp "${target}-v${APP_VER_CFG}")
+set_target_properties(${target} PROPERTIES OUTPUT_NAME "${testApp}")
 
 install(TARGETS ${target}
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-  # PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${LUA_APP_VER_CFG}
-  # FILE_SET public_headers DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${LUA_APP_VER_CFG}
 )
+
