@@ -4,8 +4,6 @@
 #include <tuple>
 #include <vector>
 
-#include "Benchmark.h"
-
 // Units required/suplementary:
 #include "Degree.h"
 #include "Meter.h"
@@ -25,22 +23,21 @@ namespace Bullet::Measured
         const Meter h;      // the initial height of the projectile
         const Meter_Sec v;  // the velocity at which the projectile is launched
 
-        std::vector<result_t> results;
-        double elapsed;
-        Benchmark benchmark;
-
         Calculator(Meter height, Meter_Sec velocity) :
             h(height),
             v(velocity),
-            results(),
-            elapsed(),
-            benchmark()
+            results()
         {
         }
 
-        result_t CalculateRange(Degree slope);
+        size_t Compute(Degree min, Degree max, Degree step);
+        std::vector<result_t> Results() { return results; };
 
-        std::vector<result_t> Compute(Degree min, Degree max, Degree step);
+    private:
+
+        result_t CalculateRange(Degree slope);
+        std::vector<result_t> results;
     };
 }
 #endif /* !BULLET_MEASURED_H */
+

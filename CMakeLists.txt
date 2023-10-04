@@ -105,8 +105,9 @@ add_subdirectory ("Metrology")
 # CALINE3 app:
 add_subdirectory ("CALINE3")
 
-# Bullet benchmark (comment out the following command to skip the benchmark):
-add_subdirectory ("TestBullet")
-
 # Unit tests (comment out the following command to skip the test):
 add_subdirectory ("Tests")
+
+# Bullet benchmark (comment out the following command to skip the benchmark):
+add_subdirectory ("Benchmark")
+

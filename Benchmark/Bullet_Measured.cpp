@@ -1,12 +1,20 @@
-#include <chrono>
-
 #include "Bullet_Measured.h"
-#include "Maths.h"
+#include "Math.h"
 
 namespace Bullet::Measured
 {
-    using namespace CALINE3::Maths;
-        
+    using namespace CALINE3::Metrology;
+
+    size_t Calculator::Compute(Degree min, Degree max, Degree step)
+    {
+        results.clear();
+        for (Degree slope = min; slope < max; slope += step)
+        {
+            results.push_back(CalculateRange(slope));
+        }
+        return results.size();
+    }
+
     Calculator::result_t Calculator::CalculateRange(Degree slope)
     {
         // the angle (in Radians) at which the projectile is launched
@@ -31,18 +39,5 @@ namespace Bullet::Measured
 
         return std::make_tuple(slope, tmax, xmax, ymax);
     }
-
-    std::vector<Calculator::result_t> Calculator::Compute(Degree min, Degree max, Degree step)
-    {
-        results.clear();
-        //benchmark.Reset();
-
-        const auto t1 = std::chrono::steady_clock::now();
-        for (Degree slope = min; slope < max; slope += step) results.push_back(CalculateRange(slope));
-        const auto t2 = std::chrono::steady_clock::now();
-        std::chrono::duration<double, std::micro> duration = t2 - t1;
-
-        benchmark.Add(elapsed = duration.count());
-        return results;
-    }
 }
+

@@ -1,11 +1,12 @@
-# Metrology Bullet Benchmark
+# Metrology Benchmarks
 #
-set(target "TestBullet")
+
+set(target "Benchmark")
 
 set(_source_files
-  Bullet_Measured.cpp
+  Benchmark.cpp
   Bullet_Plain.cpp
-  Bullet.cpp
+  Bullet_Measured.cpp
 )
 
 set_property(
@@ -26,21 +27,12 @@ add_executable(
 target_compile_features(${target} PRIVATE cxx_std_17)
 target_compile_options(${target} PRIVATE $<IF:$<STREQUAL:${CMAKE_CXX_COMPILER_FRONTEND_VARIANT},MSVC>,/W3,-Wall -Wextra>)
 target_include_directories(${target}
-  PRIVATE 
+  PRIVATE
   "${CALINE3_DIR}"
+  # The include directories required for Catch2 and METROLOGY libraries
+  # will be provided via the target_link_libraries() command used below
+  # (as the so-called Usage Requirements of these libraries)
 )
-
-##########################################################################
-#
-#   ADDRESS SANITIZER
-#
-
-if(USE_ASAN)
-  # The following is required to avoid: lld-link: error: /INFERASANLIBS is not allowed in .drectve
-  target_compile_definitions(${target} PRIVATE _DISABLE_STRING_ANNOTATION _DISABLE_VECTOR_ANNOTATION)
-  target_compile_options(${target} PRIVATE -fsanitize=address)
-  target_link_options(${target} PRIVATE -fsanitize=address)
-endif()
 
 ##########################################################################
 #
@@ -56,11 +48,13 @@ else()
 endif()
 
 # target_link_libraries() command below imports the so called Usage Requirements of
-# the METROLOGY_LIBRARY, which include (among other things) its include directories
+# the nanobench as well as METROLOGY_LIBRARY (header-only) libraries.
+# The requirements include (among other things) their include directories
 # (so there is no need to use the target_include_directories() command):
 target_link_libraries(${target}
-    PRIVATE
-  METROLOGY_LIBRARY
+  PRIVATE
+    Catch2::Catch2WithMain
+    METROLOGY_LIBRARY
 )
 
 set_target_properties(${target}
@@ -72,17 +66,19 @@ set_target_properties(${target}
 #
 #   INSTALL
 #
-#   Use the following command (in the project's root directory) to
-#   run the application:
-#
-#       ./build/${testApp}
-#
 
-set(testApp "${target}-v${APP_VER_CFG}")
+set(testApp "${target}v${APP_VER_CFG}")
 set_target_properties(${target} PROPERTIES OUTPUT_NAME "${testApp}")
 
-install(TARGETS ${target}
-  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-)
+##########################################################################
+#
+#   TEST
+#
+#   Use the following command (in the project's root directory) to
+#   run this test:
+#
+#       ./build/${testApp} "[!benchmark]" [--benchmark-no-analysis]
+#
+
+add_test(NAME "Metrology Benchmarks" COMMAND ${target} Bullet --benchmark-no-analysis)
 

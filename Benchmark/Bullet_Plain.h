@@ -5,8 +5,6 @@
 #include <tuple>
 #include <vector>
 
-#include "Benchmark.h"
-
 namespace Bullet::Plain
 {
     struct Calculator
@@ -18,22 +16,21 @@ namespace Bullet::Plain
         const double h;           // the initial height of the projectile (Meter)
         const double v;           // the velocity at which the projectile is launched (Meter/Sec)
 
-        std::vector<result_t> results;
-        double elapsed;
-        Benchmark benchmark;
-
         Calculator(double height, double velocity) :
             h(height),
             v(velocity),
-            results(),
-            elapsed(),
-            benchmark()
+            results()
         {
         }
+    
+        size_t Compute(double min, double max, double step);
+        std::vector<result_t> Results() { return results; };
+
+    private:
 
         result_t CalculateRange(double slope);
-
-        std::vector<result_t> Compute(double min, double max, double step);
+        std::vector<result_t> results;
     };
 }
 #endif /* !BULLET_PLAIN_H */
+
