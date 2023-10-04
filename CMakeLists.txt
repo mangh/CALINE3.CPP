@@ -8,14 +8,14 @@ cmake_minimum_required (VERSION 3.24)
 #   PROJECT
 #
 
-# VERSION default "2.1.0":
+# VERSION default "2.2.0":
 if(NOT DEFINED APP_VERSION)
 
   if(NOT DEFINED APP_VERSION_MAJOR)
     set(APP_VERSION_MAJOR 2)
   endif()
   if(NOT DEFINED APP_VERSION_MINOR)
-    set(APP_VERSION_MINOR 1)
+    set(APP_VERSION_MINOR 2)
   endif()
   if(NOT DEFINED APP_VERSION_PATCH)
     set(APP_VERSION_PATCH 0)
@@ -105,15 +105,17 @@ add_subdirectory ("Metrology")
 # CALINE3 app:
 add_subdirectory ("CALINE3")
 
-# Boost Test app (comment out the following command to skip the test):
-add_subdirectory ("TestBoost")
+# # Boost Test app (comment out the following command to skip the test):
+# add_subdirectory ("TestBoost")
 
-# Catch2 Test app (comment out the following command to skip the test):
-add_subdirectory ("TestCatch2")
+# # Catch2 Test app (comment out the following command to skip the test):
+# add_subdirectory ("TestCatch2")
 
-# Google Test app (comment out the following command to skip the test):
-add_subdirectory ("TestGoogle")
+# # Google Test app (comment out the following command to skip the test):
+# add_subdirectory ("TestGoogle")
 
 # Bullet benchmark (comment out the following command to skip the benchmark):
 add_subdirectory ("TestBullet")
 
+# Unit tests (comment out the following command to skip the test):
+add_subdirectory ("Tests")
