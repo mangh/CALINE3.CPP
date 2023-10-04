@@ -105,15 +105,6 @@ add_subdirectory ("Metrology")
 # CALINE3 app:
 add_subdirectory ("CALINE3")
 
-# # Boost Test app (comment out the following command to skip the test):
-# add_subdirectory ("TestBoost")
-
-# # Catch2 Test app (comment out the following command to skip the test):
-# add_subdirectory ("TestCatch2")
-
-# # Google Test app (comment out the following command to skip the test):
-# add_subdirectory ("TestGoogle")
-
 # Bullet benchmark (comment out the following command to skip the benchmark):
 add_subdirectory ("TestBullet")
 
