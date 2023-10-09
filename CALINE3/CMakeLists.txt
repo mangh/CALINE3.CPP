@@ -89,7 +89,7 @@ set_target_properties(${target}
 #       ./build/${testApp} ./CALINE3.EXP
 #
 
-set(testApp "${target}-v${APP_VER_CFG}")
+set(testApp "${target}v${APP_VER_CFG}")
 set_target_properties(${target} PROPERTIES OUTPUT_NAME "${testApp}")
 
 install(TARGETS ${target}
