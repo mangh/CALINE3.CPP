@@ -17,8 +17,6 @@
 #ifndef PLUME_H
 #define PLUME_H
 
-#include <tuple>
-
 #include "Job.h"
 #include "WindFlow.h"
 #include "LinkElement.h"

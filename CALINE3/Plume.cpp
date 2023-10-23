@@ -1,3 +1,4 @@
+#include <tuple>
 #include "Plume.h"
 
 namespace CALINE3
